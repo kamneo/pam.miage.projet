@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\37c1682fd3ceca917d4f15f4800ac3c87328f7ee\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_64f3dc830e16fad159b4baf2d593f762b2c757d1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\60d88e925be1aa60fc7ab740984050b642650842\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_1277863986cf02362b179e1d31be8a0fc43ed0d8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\796ebb2dbefd3cb98cdef2b4167a574c4c99a065\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a0ed091997970bd8d9326869af8d9904b75a4f14\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\a46323a2622aa95dc96dfb02c1358604003751dd\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="364364bf77b4a71afc5930fc3ae57b3f0eea637c">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_086af6fe030fa01167a0706882bed44d05e0a7a5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\43b260e51ab2e6455ab4ce0852e8721c217d1e27\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_62c1f2fba92b3344e5a27a68e1351196571d579a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\03182a3d76a9f204d8f3c42cd44f36b5d00bdabf\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_cc33690aeee312d6b3d0c2baadedd2c20d41927f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\5571a94a568cb985156542cc0bbc930b0c93e9a2\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="fcae52a60bc07924d370b4d376116cd8f8581f54">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_cacf71770fb3d89ef6ca674d950c5f6357b85bd8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="0fcb296eebd231fe4b36bc0aab2b65a488b1c932">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_8a02d3408862699a780a2996b4c0cc5b3bfd1ecd\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\4932258c4e520388464e059a93c331bf8b16ce5f\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_83b3e225afb51d0ca4740a590f2aece273508d2b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\afb23f7d22d79968fc94d045923c1880249e3879\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_67e957c871a5584ef8f5266fb5b0da37723b4229\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\cdee0f901f46663f80f9aa7d53523c7f140abf4a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d90da71654531e58caed228c8a44974906de6e24\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Users\kamneo\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.3.1_5af99dd2cd6091c7f3bbc12996a6abe794ce3867\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\ee9d8a61199a60a236b7bf68da13611932ff7331\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_de0281c260cf92e96c1f6ba8762c126857187a15\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\a1ba8d662bfb838fa7adac251a0957925db443a9\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="5594a368622908d89c47d9a391aa2724fe046c35">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_baed3a26015d2af69edb7c1f0dc919800ff4a6fc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\c2ff8fd7a65da3dea935ae07aeb0527acaf9de33\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6d70f4aa771b4f9c4db05a317a2d704eb21276b5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\4d80206a5a7e33eb48fb15f359be5d2915a4a861\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4db68079ecf772e176f0774ccec4d060cb7a2868\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Users\kamneo\AppData\Local\Android\sdk\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\constraint-layout-solver-1.0.2_6368efcb01dfbee168d50ee61f0758b7a27b4bba\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\001e59bff59528d541a219d09e1a6d6068ba584c\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7747eacd40bfbb1a45d4d25744efd06c8a65b2d9\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_6df105e7d8a7c2eb6c435d118411ea84794312ce\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\522daa7b1f73dcf9a1290b36ed7cc0eec4e722b3\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_68a0e6a5504b934598be025c34a41f1056a9a3d2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\561cb2adc95d4fc6a6b43157e1907e787bc5a139\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_bdc3c79868e54b248fde3f45d235af7aa9fffe14\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\kamneo\.android\build-cache\2bf9ad5ada3e49d7c267ef7e1604e4b62259888e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="2430e711762a749feb00b3d64858ca4768251b9d">
+        <dex dex="D:\Utilisateurs\Documents\Cours\prog mobile\RendezVous\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_281b17e904028279f9bbe3d8b630ecfe3dfda644\classes.dex" />
+    </item>
+
+</items>
