@@ -1,24 +1,34 @@
 package rendezvousgeolocalises.projet.pam.rendezvous.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.Contacts;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +49,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,8 +60,11 @@ import java.util.List;
 import java.util.Locale;
 
 import rendezvousgeolocalises.projet.pam.rendezvous.R;
+import rendezvousgeolocalises.projet.pam.rendezvous.model.Account;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.MyLocation;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.RendezVous;
+import rendezvousgeolocalises.projet.pam.rendezvous.sqlLite.RDVStatusDAO;
+import rendezvousgeolocalises.projet.pam.rendezvous.sqlLite.RendezVousDAO;
 
 public class CreateEventActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -58,41 +73,59 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
     private GoogleMap mMap;
     LocationManager locationManager;
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private int CONTACT_PICK_CODE = 2;
     private String TAG = "bonjour";
     private MapView mapView;
     private LatLng lastPostion;
     private Marker marker;
+    private boolean newEvent;
+    private RendezVous oldRendezVous = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
+        newEvent = getIntent().getBooleanExtra("newEvent", true);
+
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         MapsInitializer.initialize(this);
-
-        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        lastPostion = getCurrentPosition();
         myCalendar = Calendar.getInstance();
-        date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            }
-        };
 
+        if(newEvent){
+            locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+            lastPostion = getCurrentPosition();
+            date = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    myCalendar.set(Calendar.YEAR, year);
+                    myCalendar.set(Calendar.MONTH, monthOfYear);
+                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                }
+            };
+        }else{
+            oldRendezVous = (RendezVous)getIntent().getSerializableExtra("rendezVous");
+            findViewById(R.id.radioButtons).setVisibility(View.GONE); //on cache les radioBoutons
+            findViewById(R.id.layout_contact).setVisibility(View.GONE); //on cache l'ajout de contact
+            findViewById(R.id.create_eventName).setEnabled(false); //desactivation de l'input pour le titre
+            findViewById(R.id.date_value).setClickable(false); //on cache l'ajout de contact
+
+            ((EditText)findViewById(R.id.create_eventName)).setText(oldRendezVous.getName());
+            myCalendar.setTime(oldRendezVous.getDate());
+        }
         updateLabel();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.create_event, menu);
-        return true;
+        if(newEvent) {
+            getMenuInflater().inflate(R.menu.create_event, menu);
+            return true;
+        }else
+            return false;
     }
 
     @Override
@@ -112,6 +145,7 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void createEvent() throws ParseException, IOException {
+        RendezVousDAO rendezVousDAO = new RendezVousDAO(this);
         String myFormat = "dd/MM/yyyy";
         ArrayList<String> contacts = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRENCH);
@@ -122,9 +156,30 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
         for(String s : tab_contacts)
             contacts.add(s.trim());
 
-        RendezVous rendezVous = new RendezVous(this, eventName, date, contacts, marker.getPosition());
+        SharedPreferences sharedPreferences = getSharedPreferences("LOG_PREF", MODE_PRIVATE);
+        Account logged = new Account();
+        logged.load(sharedPreferences);
+        if(logged.isNull()){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
 
+        RendezVous rendezVous = new RendezVous(this, eventName, date, contacts, marker.getPosition());
+        for (String phoneNumber: contacts){
+            sendInvitation(phoneNumber, rendezVous);
+        }
+
+        rendezVousDAO.add(rendezVous);
         finish();
+    }
+
+    private void sendInvitation(String phoneNumber, RendezVous rendezVous) {
+        if(phoneNumber.length() > 10 && phoneNumber.length()<4){
+            Toast.makeText(this, "Numero incorect : " + phoneNumber, Toast.LENGTH_LONG).show();
+            return;
+        }
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber, null, "Vous êtes invité à un nouveau rendez-vous. " + rendezVous.sendInformations(), null, null);
     }
 
     public void setDate(View view) {
@@ -150,10 +205,13 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
         }
         mMap.setMyLocationEnabled(true);
         // Updates the location and zoom of the MapView
-        if (lastPostion != null) {
+        if (lastPostion != null && newEvent) {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(lastPostion, 10);
             addMarker(lastPostion);
             mMap.animateCamera(cameraUpdate);
+        }
+        if(!newEvent){
+            addMarker(new LatLng(oldRendezVous.getLocation().getLatitude(), oldRendezVous.getLocation().getLongitude()));
         }
     }
 
@@ -279,6 +337,63 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
             } else if (resultCode == RESULT_CANCELED) {
 
             }
+        } else if(requestCode == CONTACT_PICK_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contactURI = data.getData();
+                String phone = retrieveContactNumber(contactURI);
+                if(phone.length() > 0) {
+                    EditText et = (EditText) findViewById(R.id.create_contacts);
+                    et.setText((et.getText().length()>0)? et.getText() + "; " + phone : phone);
+                    et.setSelection(et.getText().length());
+                }
+            }
         }
+    }
+
+    public void readContact(View view){
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
+            startActivityForResult(intent, CONTACT_PICK_CODE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String retrieveContactNumber(Uri uriContact) {
+        String contactNumber = null;
+        String contactID = "";
+
+        // getting contacts ID
+        Cursor cursorID = getContentResolver().query(uriContact,
+                new String[]{ContactsContract.Contacts._ID},
+                null, null, null);
+
+        if (cursorID.moveToFirst()) {
+
+            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+        }
+
+        cursorID.close();
+
+        Log.d(TAG, "Contact ID: " + contactID);
+
+        // Using the contact ID now we will get contact phone number
+        Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
+
+                new String[]{contactID},
+                null);
+
+        if (cursorPhone.moveToFirst()) {
+            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        }
+
+        cursorPhone.close();
+
+       return contactNumber;
     }
 }

@@ -18,7 +18,7 @@ public class AccountDAO {
     public static final String COLUMN_PHONE_NUMBER = "phoneNumber";
     public static final String COLUMN_PASSWORD = "password";
 
-    public static final String DATABASE_CREATE_ACCOUNT = "create table "
+    public static final String DATABASE_CREATE_ACCOUNT = "create table if not exists "
             + TABLE_ACCOUNT + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_NAME + " text,"

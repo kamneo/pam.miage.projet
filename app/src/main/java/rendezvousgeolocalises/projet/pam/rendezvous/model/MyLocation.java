@@ -4,8 +4,11 @@ import android.location.Address;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class MyLocation {
-    private LatLng latLng;
+import java.io.Serializable;
+
+public class MyLocation implements Serializable{
+    private double latitude;
+    private double longitude;
     private String address;
     private String city;
     private String state;
@@ -13,7 +16,8 @@ public class MyLocation {
     private String postalCode;
 
     public MyLocation(Address pAddress){
-        latLng = new LatLng(pAddress.getLatitude(), pAddress.getLongitude());
+        latitude = pAddress.getLatitude();
+        longitude = pAddress.getLongitude();
         address = pAddress.getAddressLine(0);
         city = pAddress.getLocality();
         state = pAddress.getAdminArea();
@@ -21,24 +25,13 @@ public class MyLocation {
         postalCode = pAddress.getPostalCode();
     }
 
-    public LatLng getLatLng() {
-        return latLng;
-    }
 
     public double getLatitude() {
-        return latLng.latitude;
+        return latitude;
     }
 
     public double getLongitude() {
-        return latLng.longitude;
-    }
-
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
-    }
-
-    public void setLatLng(double latitude, double longitude) {
-        this.latLng = new LatLng(latitude, longitude);
+        return longitude;
     }
 
     public String getAddress() {
@@ -86,7 +79,7 @@ public class MyLocation {
     @Override
     public String toString() {
         return "MyLocation{" +
-                "latLng=" + latLng +
+                "latLng=" + latitude + " : " + longitude +
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +

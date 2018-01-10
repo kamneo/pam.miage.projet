@@ -33,4 +33,7 @@
         completions."
     </string>
     <string name="title_activity_register">Créer un compte</string>
+    <string name="title_activity_main_maps">MainMapsActivity</string>
+    <string name="nav_maps">Voir sur la carte</string>
+    <string name="nav_list">Voir la liste</string>
 </resources>

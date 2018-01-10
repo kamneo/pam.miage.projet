@@ -2,15 +2,22 @@ package rendezvousgeolocalises.projet.pam.rendezvous.sqlLite;
 
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
+import android.os.Build;
+import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
 
     private static final String DATABASE_NAME = "rendezVousGeolocalises.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private static MySQLiteHelper sInstance;
 
     public static synchronized MySQLiteHelper getInstance(Context context) {
@@ -40,5 +47,24 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + AccountDAO.TABLE_ACCOUNT);
         db.execSQL("DROP TABLE IF EXISTS " + RendezVousDAO.TABLE_EVENTS);
         onCreate(db);
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        SQLiteDatabase db = super.getWritableDatabase();
+        cleanTables(db);
+        return db;
+    }
+
+    public static void cleanTables(SQLiteDatabase db) {
+        Cursor c = db.rawQuery("SELECT * FROM " + RendezVousDAO.TABLE_EVENTS + "  WHERE " + RendezVousDAO.COLUMN_DATE + "< strftime('%Y-%m-%d','now');" , null);
+        if (c.moveToFirst()){
+            do {
+                int id = c.getInt(c.getColumnIndex(RendezVousDAO.COLUMN_ID));
+                int id_location = c.getInt(c.getColumnIndex(RendezVousDAO.COLUMN_ID_LOCATION));
+                RendezVousDAO.remove(db, id);
+            } while(c.moveToNext());
+        }
+        c.close();
     }
 }

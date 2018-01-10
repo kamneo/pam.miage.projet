@@ -19,9 +19,9 @@ public class RDVStatusDAO {
     public static final String COLUMN_ID_ACCOUNT = "id_account";
     public static final String COLUMN_STATUS = "status";
 
-    public static final String DATABASE_CREATE_RDV_STATUS = "create table "
+    public static final String DATABASE_CREATE_RDV_STATUS = "create table if not exists "
             + TABLE_RDV_STATUS + "("
-            + COLUMN_ID_RDV + " integer, "
+            + COLUMN_ID_RDV + " integer primary key autoincrement, "
             + COLUMN_ID_ACCOUNT + " text,"
             + COLUMN_STATUS + " text);";
 

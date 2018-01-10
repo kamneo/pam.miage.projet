@@ -17,12 +17,16 @@
             android:layout_weight="0.9"
             android:orientation="vertical"
             android:paddingBottom="5dp"
+            android:onClick="showInMap"
             android:paddingTop="5dp">
 
             <TextView
                 android:id="@+id/lblListItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="30"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
                 android:textSize="@dimen/text_size" />
 
@@ -30,28 +34,42 @@
                 android:id="@+id/itemSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="30"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
                 android:textSize="@dimen/little_text_size" />
 
+            <TextView
+                android:id="@+id/idItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
         <ImageButton
             android:id="@+id/imageDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:background="@color/white"
-            android:layout_weight="0.05"
             app:srcCompat="@drawable/ic_menu_cancel" />
 
         <ImageButton
             android:id="@+id/imageConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:background="@color/white"
-            android:layout_weight="0.05"
             app:srcCompat="@drawable/ic_menu_done" />
+    </LinearLayout>
     </LinearLayout>
 
 

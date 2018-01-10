@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import rendezvousgeolocalises.projet.pam.rendezvous.model.Account;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.MyLocation;
 
@@ -26,7 +28,7 @@ public class MyLocationDAO {
     public static final String COLUMN_STATE = "state";
     public static final String COLUMN_POSTAL_CODE = "postalCode";
 
-    public static final String DATABASE_CREATE_LOCATION = "create table "
+    public static final String DATABASE_CREATE_LOCATION = "create table if not exists "
             + TABLE_LOCATION + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_LATITUDE + " text,"
@@ -63,5 +65,18 @@ public class MyLocationDAO {
         long res = db.insert(TABLE_LOCATION,null,contentValues);
         close();
         return res;
+    }
+
+    public LatLng getLatLngFromId(int id) {
+        LatLng latLng = null;
+        open();
+        Cursor c = db.query(TABLE_LOCATION, new String[]{COLUMN_LATITUDE, COLUMN_LONGITUDE}, COLUMN_ID + " = '" + id + "'", null, null, null, null);
+        if(c.moveToFirst()) {
+            latLng = new LatLng(Double.parseDouble(c.getString(c.getColumnIndex(COLUMN_LATITUDE))),
+                    Double.parseDouble(c.getString(c.getColumnIndex(COLUMN_LONGITUDE))));
+        }
+        c.close();
+        close();
+        return latLng;
     }
 }
