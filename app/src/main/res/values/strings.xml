@@ -36,4 +36,10 @@
     <string name="title_activity_main_maps">MainMapsActivity</string>
     <string name="nav_maps">Voir sur la carte</string>
     <string name="nav_list">Voir la liste</string>
+
+    <string name="message_header">RendezVousGeolocaliser: </string>
+
+    <string name="notification">Notification www.tutos-android.com</string>
+    <string name="notification_title">Rendez-vous géolocalisés</string>
+    <string name="notification_desc">Vous êtes invité à un nouveau rendez vous</string>
 </resources>

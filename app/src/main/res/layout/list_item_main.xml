@@ -60,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="delete"
             app:srcCompat="@drawable/ic_menu_cancel" />
 
         <ImageButton
@@ -68,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:background="@color/white"
+            android:onClick="accept"
             app:srcCompat="@drawable/ic_menu_done" />
     </LinearLayout>
     </LinearLayout>

@@ -3,6 +3,7 @@ package rendezvousgeolocalises.projet.pam.rendezvous.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import rendezvousgeolocalises.projet.pam.rendezvous.R;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.Account;
-import rendezvousgeolocalises.projet.pam.rendezvous.sqlLite.AccountDAO;
+import rendezvousgeolocalises.projet.pam.rendezvous.persistance.AccountDAO;
 
 /**
  * A login screen that offers login via email/password.
@@ -39,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPhoneView;
     private View mProgressView;
     private View mLoginFormView;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        context = this.getApplicationContext();
     }
 
     public void register(View view){
@@ -181,7 +186,6 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mPhone;
         private final String mPassword;
-        private AccountDAO accountDAO;
         private Account account;
 
         UserLoginTask(String phone, String password) {
@@ -192,12 +196,15 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            accountDAO = new AccountDAO(LoginActivity.this);
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-           account = accountDAO.getAccountWithPhone(mPhone);
+            try {
+                account = AccountDAO.getAccountWithPhone(context, mPhone);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             return account != null;
         }
 

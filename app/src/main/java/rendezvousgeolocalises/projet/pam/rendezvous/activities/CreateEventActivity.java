@@ -4,12 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
@@ -63,8 +65,8 @@ import rendezvousgeolocalises.projet.pam.rendezvous.R;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.Account;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.MyLocation;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.RendezVous;
-import rendezvousgeolocalises.projet.pam.rendezvous.sqlLite.RDVStatusDAO;
-import rendezvousgeolocalises.projet.pam.rendezvous.sqlLite.RendezVousDAO;
+import rendezvousgeolocalises.projet.pam.rendezvous.persistance.RendezVousDAO;
+import rendezvousgeolocalises.projet.pam.rendezvous.utils.StatusLevel;
 
 public class CreateEventActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -80,6 +82,13 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
     private Marker marker;
     private boolean newEvent;
     private RendezVous oldRendezVous = null;
+    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            myCalendar.set(selectedYear, selectedMonth, selectedDay);
+            updateLabel();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +154,6 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void createEvent() throws ParseException, IOException {
-        RendezVousDAO rendezVousDAO = new RendezVousDAO(this);
         String myFormat = "dd/MM/yyyy";
         ArrayList<String> contacts = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRENCH);
@@ -164,12 +172,16 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
             startActivity(intent);
         }
 
-        RendezVous rendezVous = new RendezVous(this, eventName, date, contacts, marker.getPosition());
+        RendezVous rendezVous = new RendezVous(this, eventName, date, contacts, marker.getPosition(), StatusLevel.CREATOR);
         for (String phoneNumber: contacts){
             sendInvitation(phoneNumber, rendezVous);
         }
 
-        rendezVousDAO.add(rendezVous);
+        try {
+            RendezVousDAO.storeRendezVous(this, rendezVous);
+        } catch (ClassNotFoundException e) {
+            Toast.makeText(this, "Une erreur s'est produite lors de la création de l'event", Toast.LENGTH_SHORT).show();
+        }
         finish();
     }
 
@@ -179,12 +191,15 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
             return;
         }
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, "Vous êtes invité à un nouveau rendez-vous. " + rendezVous.sendInformations(), null, null);
+        String message = getResources().getString(R.string.message_header) + rendezVous.sendInformations();
+        smsManager.sendTextMessage(phoneNumber, null, message, null, null);
     }
 
     public void setDate(View view) {
-        new DatePickerDialog(CreateEventActivity.this, date, myCalendar
-                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+        new DatePickerDialog(CreateEventActivity.this,
+                datePickerListener,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 

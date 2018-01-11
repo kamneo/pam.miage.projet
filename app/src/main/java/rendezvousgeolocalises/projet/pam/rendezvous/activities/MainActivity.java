@@ -1,6 +1,9 @@
 package rendezvousgeolocalises.projet.pam.rendezvous.activities;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,7 +53,8 @@ import java.util.List;
 
 import rendezvousgeolocalises.projet.pam.rendezvous.model.Account;
 import rendezvousgeolocalises.projet.pam.rendezvous.model.RendezVous;
-import rendezvousgeolocalises.projet.pam.rendezvous.sqlLite.RendezVousDAO;
+import rendezvousgeolocalises.projet.pam.rendezvous.persistance.AccountDAO;
+import rendezvousgeolocalises.projet.pam.rendezvous.persistance.RendezVousDAO;
 import rendezvousgeolocalises.projet.pam.rendezvous.utils.CustomExpandableListAdapter;
 import rendezvousgeolocalises.projet.pam.rendezvous.R;
 import rendezvousgeolocalises.projet.pam.rendezvous.utils.SmsReceiver;
@@ -71,9 +75,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         checkPermissions();
-
-        IntentFilter filter = new IntentFilter();
-        registerReceiver(new SmsReceiver(),filter);
 
         gpsIsActivated();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -179,6 +180,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
     private void fillExpendedList() {
         prepareListData();
         CustomExpandableListAdapter listAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
@@ -252,12 +258,19 @@ public class MainActivity extends AppCompatActivity
         expandableListTitle.add("Rendez vous non validés");
 
         // Adding child data
-        RendezVousDAO rendezVousDAO = new RendezVousDAO(this);
-        List<List<String>> rdvs = rendezVousDAO.getAllFormatedRendezVousAccepted();
-        if(rdvs.size() == 0) rdvs.add(new ArrayList<>(Arrays.asList("Aucun rendez-vous n'est prévu", null, null,StatusLevel.ACCEPTED+"")));
+        List<List<String>> rdvs = new ArrayList<>();
+        List<List<String>> nowShowing = new ArrayList<>();
+        try {
+            rdvs = RendezVousDAO.getAllFormatedRendezVousAccepted(this);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        List<List<String>> nowShowing = rendezVousDAO.getAllFormatedRendezVousNotAccepted();
-        if(nowShowing.size() == 0) nowShowing.add(new ArrayList<>(Arrays.asList("Vide", null, "-1",StatusLevel.ACCEPTED+"")));
+        try{
+            nowShowing = RendezVousDAO.getAllFormatedRendezVousNotAccepted(this);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         expandableListDetail.put(expandableListTitle.get(0), rdvs); // Header, Child data
         expandableListDetail.put(expandableListTitle.get(1), nowShowing);
@@ -300,8 +313,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private RendezVous getRendezVousById(String id) throws IOException {
-        RendezVousDAO rendezVousDAO = new RendezVousDAO(this.getApplicationContext());
-        return rendezVousDAO.getRendezVousById(id);
+        try {
+            return RendezVousDAO.getRendezVousById(this, id);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -322,28 +339,35 @@ public class MainActivity extends AppCompatActivity
             m.remove();
 
         markers = new ArrayList<>();
-        for(List<String> data : expandableListDetail.get(expandableListTitle.get(0))){
-            try {
-                RendezVous rdv = getRendezVousById(data.get(2));
-                addMarker(new LatLng(rdv.getLocation().getLatitude(), rdv.getLocation().getLongitude()), rdv.getName(), rdv.getDate().toString(), BitmapDescriptorFactory.HUE_RED);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        for(List<String> data : expandableListDetail.get(expandableListTitle.get(1))){
-            try {
-                if(data.get(2) != null  && !data.get(2).equals("-1")){
-                    RendezVous rdv = getRendezVousById(data.get(2));
-                    addMarker(new LatLng(rdv.getLocation().getLatitude(), rdv.getLocation().getLongitude()), rdv.getName(), rdv.getDate().toString(), BitmapDescriptorFactory.HUE_ORANGE);
+        if(expandableListDetail != null) {
+            for (List<String> data : expandableListDetail.get(expandableListTitle.get(0))) {
+                try {
+                    if (data.get(2) != null && !data.get(2).equals("-1")) {
+                        RendezVous rdv = getRendezVousById(data.get(2));
+                        addMarker(new LatLng(rdv.getLocation().getLatitude(), rdv.getLocation().getLongitude()), rdv.getName(), rdv.getDate().toString(), BitmapDescriptorFactory.HUE_RED);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+            for (List<String> data : expandableListDetail.get(expandableListTitle.get(1))) {
+                try {
+                    if (data.get(2) != null && !data.get(2).equals("-1")) {
+                        RendezVous rdv = getRendezVousById(data.get(2));
+                        addMarker(new LatLng(rdv.getLocation().getLatitude(), rdv.getLocation().getLongitude()), rdv.getName(), rdv.getDate().toString(), BitmapDescriptorFactory.HUE_ORANGE);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     private void annimateMap(){
         //animation
+        if(markers.size() == 0)
+            return;
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Marker marker : markers) {
             builder.include(marker.getPosition());
@@ -380,5 +404,18 @@ public class MainActivity extends AppCompatActivity
                  .title(title)
                  .snippet(snippet)
                  .icon(BitmapDescriptorFactory.defaultMarker(color))));
+    }
+
+    public void delete(View view) {
+        String id =((TextView)((View)view.getParent().getParent()).findViewById(R.id.idItem)).getText().toString();
+        RendezVousDAO.deleteById(this, id);
+        fillExpendedList();
+    }
+
+    public void accept(View view) {
+        String id =((TextView)((View)view.getParent().getParent()).findViewById(R.id.idItem)).getText().toString();
+        RendezVousDAO.acceptById(this, id);
+        fillExpendedList();
+
     }
 }

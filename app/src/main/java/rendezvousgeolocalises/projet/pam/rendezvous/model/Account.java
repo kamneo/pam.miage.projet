@@ -69,6 +69,14 @@ public class Account {
         editor.commit();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Account))
+            return false;
+        Account a = (Account) obj;
+        return name.equals(a.getName()) && firstName.equals(a.getFirstName()) && phoneNumber.equals(a.getPhoneNumber());
+    }
+
     public boolean isNull() {
         return phoneNumber == null || name == null || firstName == null;
     }
